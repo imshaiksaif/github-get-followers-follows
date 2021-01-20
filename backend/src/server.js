@@ -1,10 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-require('dotenv').config()
+const cors = require('cors');
 
 const routes = require('./routes');
 
+require('dotenv').config();
+
+const corsOptions = {
+  origin: process.env.ORIGIN,
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(bodyParser.json())
