@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -13,5 +17,21 @@ body {
     align-items: center;
     max-width: 1200;
     margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .submit-btn {
+    background: #FFC700;
+    border-radius: 15px;
+    font-family: Montserrat;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 30px;
+    padding: 6px 28px;
+    cursor: pointer;
+  }
+
+  .submit-btn:disabled {
+    cursor: not-allowed;
   }
 }

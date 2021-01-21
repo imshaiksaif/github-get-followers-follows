@@ -1,0 +1,24 @@
+.result-section{
+  width: 100%;
+  margin-top: 30px;
+
+  .title {
+    font-weight: normal;
+  }
+
+  .profiles-block {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 0;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .no-profiles-found {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
+import { useHistory } from "react-router-dom";
 import {useFormValidation} from '../customHooks/useFormValidation';
 import FormInput from './FormInput';
 
 import '../styles/UserForm.scss';
-import { UsersResultListContext } from '../contexts/UsersResultListContext';
 
 export const UserForm = () => {
   const [ formData, setFormData ] = useState({primaryUserName: '', secondaryUserName: ''});
   const [btnText, setBtnText] = useState('Get Result');
   const { formErrors, setFormErrors, validateForm, checkForFormErrors, btnDisabled, setBtnDisabled } = useFormValidation();
-  const { setUsersResultList } = useContext(UsersResultListContext);
+  const history = useHistory();
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -30,15 +30,15 @@ export const UserForm = () => {
       setBtnText('Please Wait...');
       const [primaryUser, secondaryUser] = await Promise.all([validateUser(primaryUserName), validateUser(secondaryUserName)]);
       if(primaryUser && secondaryUser) {
-        await getUsersList();
+        history.push(`/result/${primaryUserName}/${secondaryUserName}`);
       } else {
         setBtnText("Try Again");
         setBtnDisabled(true);
         setFormErrors(prevData => {
           return {
             ...prevData,
-            primaryUserName: primaryUser ? "invalid username" : '',
-            secondaryUserName: secondaryUser ? "invalid username" : ''
+            primaryUserName: primaryUser ? '' : "invalid username",
+            secondaryUserName: secondaryUser ? '' : "invalid username"
           }
         })
       }
@@ -49,7 +49,7 @@ export const UserForm = () => {
 
   const validateUser = async (userName) => {
     try {
-      const user = await fetch(`https://api.github.com/users/${userName}`).then(res => res.json);
+      const user = await fetch(`https://api.github.com/users/${userName}`).then(res => res.json());
       if (user.message) {
         return false;
       }
@@ -59,30 +59,7 @@ export const UserForm = () => {
     }
   }
   
-  const getUsersList = async () => {
-    try {
-    const { success, resultList } = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/github/get-list`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-      })
-      .then(res => res.json());
-    
-    if(success) {
-      setFormData({
-        primaryUserName: '',
-        secondaryUserName: '',
-      });
-      setUsersResultList(resultList);
-      console.log({resultList})
-    } else {
-      setBtnText("Try Again with different user");
-    }
-      } catch (err) {
-        console.log({err});
-      }
-  } 
-
+  
   return (
     <form className="user-form" onSubmit={handleSubmit}>
       <FormInput type='text' name='primaryUserName' value={formData.primaryUserName} onChange={handleChange} label='Enter the primary username' required />

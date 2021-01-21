@@ -17,14 +17,14 @@ export function useFormValidation() {
     switch (name) {
       case 'primaryUserName': 
         errors.primaryUserName = 
-            value.length < 3
-            ? 'Must be atleast 3 characters long'
+            value.length < 1
+            ? 'Cannot be Empty'
             : '';
         break;
       case 'secondaryUserName': 
         errors.secondaryUserName = 
-            value.length < 3
-            ? 'Must be atleast 3 characters long'
+            value.length < 1
+            ? 'Cannot be Empty'
             : '';
         break;
       default:
